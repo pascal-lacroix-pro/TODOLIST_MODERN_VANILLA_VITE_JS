@@ -89,4 +89,18 @@ export default class Todolist {
     // Rerender de l'itemsLeftCount
     this.renderItemsLeftCount();
   }
+
+  async updateOneById(id, content) {
+    // On change le todo
+    const todo = this.todos.find((todo) => todo.id == id);
+    todo.content = content;
+
+    // On modifie la DB
+    const resp = await DB.updateOne(todo);
+
+    // On modifie le DOM
+    this.domElt.querySelector(`[data-id="${id}"]`).classList.remove("editing");
+    this.domElt.querySelector(`[data-id="${id}"] label`).innerText =
+      todo.content;
+  }
 }
