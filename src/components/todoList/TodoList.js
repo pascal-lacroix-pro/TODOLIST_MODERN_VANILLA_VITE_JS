@@ -50,4 +50,27 @@ export default class Todolist {
 
     input.value = "";
   }
+
+  deleteOneByIdFromTodos(id) {
+    const index = this.todos.findIndex((todo) => todo.id === id);
+    this.todos.splice(index, 1);
+  }
+
+  deleteOneByIdFromDOM(id) {
+    this.domElt.querySelector(`[data-id="${id}"]`).remove();
+  }
+
+  async deleteOneById(id) {
+    // Je supprime de la DB
+    const resp = await DB.deleteOneById(id);
+
+    if (resp.ok) {
+      // Je supprime des todos
+      this.deleteOneByIdFromTodos(id);
+      // Je supprime du DOM
+      this.deleteOneByIdFromDOM(id);
+      // Rerenderer le itemsLeftCount
+      this.renderItemsLeftCount();
+    }
+  }
 }
